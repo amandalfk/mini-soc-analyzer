@@ -27,21 +27,21 @@ def contar_eventos(lista_eventos):
 
 
 def identificar_bruteforce(lista_eventos):
-    tentativas = {}
+    falhas = {}
 
     for evento in lista_eventos:
         if evento["evento"] == "login_falha":
             ip = evento["ip"]
 
-            if ip in tentativas:
-                tentativas[ip] += 1
+            if ip in falhas:
+                falhas[ip] += 1
             else:
-                tentativas[ip] = 1
+                falhas[ip] = 1
 
     suspeitos = []
 
-    for ip, total in tentativas.items():
-        if total >= 3:
+    for ip, quantidade in falhas.items():
+        if quantidade >= 3:
             suspeitos.append(ip)
 
     return suspeitos
@@ -59,13 +59,13 @@ def identificar_scanners(lista_eventos):
             else:
                 scans[ip] = 1
 
-    scanners = []
+    suspeitos = []
 
-    for ip, total in scans.items():
-        if total >= 2:
-            scanners.append(ip)
+    for ip, quantidade in scans.items():
+        if quantidade >= 2:
+            suspeitos.append(ip)
 
-    return scanners
+    return suspeitos
 
 
 def listar_ips_unicos(lista_eventos):
@@ -84,24 +84,28 @@ def gerar_relatorio(lista_eventos):
     print("Total de eventos analisados:", len(lista_eventos), "\n")
 
     print("Resumo por tipo:")
+
     contagem = contar_eventos(lista_eventos)
 
-    for tipo, total in contagem.items():
-        print(f"{tipo}: {total}")
+    for tipo, quantidade in contagem.items():
+        print(f"{tipo}: {quantidade}")
 
     print("\nIPs únicos monitorados:")
+
     ips = listar_ips_unicos(lista_eventos)
 
     for ip in ips:
         print(ip)
 
     print("\nPossível brute force:")
+
     bruteforce = identificar_bruteforce(lista_eventos)
 
     for ip in bruteforce:
         print(ip)
 
     print("\nPossível scanner:")
+
     scanners = identificar_scanners(lista_eventos)
 
     for ip in scanners:
