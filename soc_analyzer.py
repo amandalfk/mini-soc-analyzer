@@ -1,3 +1,5 @@
+print("Mini SOC Analyzer iniciado")
+
 eventos = [
     {"ip": "192.168.0.10", "evento": "login_sucesso"},
     {"ip": "192.168.0.11", "evento": "login_falha"},
